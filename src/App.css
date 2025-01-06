@@ -1,0 +1,17 @@
+.app {
+  text-align: center;
+}
+
+nav {
+  background-color: #282c34;
+  padding: 1rem;
+  color: white;
+}
+
+nav h1 {
+  margin: 0;
+}
+
+main {
+  padding: 2rem;
+} 

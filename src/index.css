@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[#0B0F19] text-gray-200 antialiased;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .glow {
+    @apply relative;
+  }
+  
+  .glow::after {
+    @apply content-[''] absolute -z-10 blur-[120px] rounded-full transition-all duration-700 ease-in-out;
+    background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(99,102,241,0.1) 100%);
+    width: 150%;
+    height: 150%;
+    left: -25%;
+    top: -25%;
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slide {
+  animation: slide 30s linear infinite;
+}
+
+/* Optional: Pause animation on hover */
+.animate-slide:hover {
+  animation-play-state: paused;
+} 
