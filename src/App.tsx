@@ -7,6 +7,7 @@ import { SubscriptionList } from './components/SubscriptionList';
 import { FamilyManagement } from './components/FamilyManagement';
 import Login from './components/Login';
 import { Dashboard } from './components/Dashboard';
+import { Footer } from './components/Footer';
 
 function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -79,6 +80,7 @@ function App() {
               <Route path="/login" component={Login} />
             </Switch>
           </main>
+          <Footer />
         </div>
       </AuthProvider>
     </Router>

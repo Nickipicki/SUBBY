@@ -3,6 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { useHistory } from 'react-router-dom';
 import { HowItWorks } from './HowItWorks';
 import { Benefits } from './Benefits';
+import { Testimonials } from './Testimonials';
+import { FAQ } from './FAQ';
 
 // Logos für die Slideshow
 const services = [
@@ -121,6 +123,8 @@ export const Hero = () => {
       </div>
       <Benefits />
       <HowItWorks />
+      <Testimonials />
+      <FAQ />
     </>
   );
 } 
