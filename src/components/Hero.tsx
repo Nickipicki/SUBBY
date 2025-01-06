@@ -40,29 +40,44 @@ export const Hero = () => {
     <>
       <div className="relative">
         <div className="relative container mx-auto px-4 pt-32 pb-20 text-center">
-          <div className="relative">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              <span className="flex items-center justify-center gap-2 mb-4">
-                subby
-              </span>
-              Verwalte deine<br />
-              <span className="bg-gradient-to-r from-purple-400 to-indigo-400 text-transparent bg-clip-text">
-                Abonnements smart
+          <img 
+            src="/images/logo.svg"
+            alt="Subby Logo"
+            className="h-21 w-auto mx-auto mb-12"
+          />
+          
+          <div className="space-y-6 mb-12">
+            <h1 className="text-6xl md:text-8xl font-bold">
+              <span className="text-white">Verwalte deine</span>
+              <br />
+              <span className="relative">
+                <span className="absolute -inset-1 blur-2xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30" />
+                <span className="relative bg-gradient-to-r from-purple-400 to-indigo-400 text-transparent bg-clip-text">
+                  Abonnements smart
+                </span>
               </span>
             </h1>
+            
+            <p className="text-gray-400 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
+              Behalte den <span className="text-white font-medium">Überblick</span> über deine Abos 
+              und teile die <span className="text-white font-medium">Kosten</span> einfach mit 
+              <span className="relative inline-block px-2">
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-indigo-400/10 rounded-lg transform -skew-x-6" />
+                <span className="relative text-white font-medium">Familie und Freunden</span>
+              </span>
+            </p>
           </div>
-          
-          <p className="text-gray-400 text-xl md:text-2xl max-w-3xl mx-auto mb-12">
-            Behalte den Überblick über deine Abos und teile die Kosten 
-            einfach mit Familie und Freunden.
-          </p>
 
           <button 
             onClick={() => history.push('/dashboard')}
-            className="bg-gradient-to-r from-purple-500 to-indigo-500 px-8 py-4 rounded-full font-semibold text-lg text-white hover:opacity-90 transition-opacity inline-flex items-center gap-2"
+            className="group relative px-8 py-4 rounded-full font-semibold text-lg text-white overflow-hidden transition-all duration-300 transform hover:scale-105"
           >
-            Jetzt starten
-            <ArrowRight className="w-5 h-5" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <span className="relative flex items-center gap-2">
+              Jetzt starten
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </span>
           </button>
 
           {/* Logo Slideshow */}
