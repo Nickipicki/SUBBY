@@ -1,6 +1,10 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { CreditCard, Users, Receipt, Bell, Search } from 'lucide-react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
+import { DatabaseService } from '../services/database';
 
 // Logos für die Slideshow
 const services = [
@@ -43,7 +47,27 @@ const StatCard = ({ icon: Icon, value, label, trend }: { icon: any, value: strin
 );
 
 export const Dashboard = () => {
-  const history = useHistory();
+  const router = useRouter();
+  const { user } = useAuth();
+  const [subscriptions, setSubscriptions] = useState([]);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    const fetchSubscriptions = async () => {
+      try {
+        const data = await DatabaseService.getSubscriptions();
+        setSubscriptions(data);
+      } catch (error) {
+        console.error('Error fetching subscriptions:', error);
+      }
+    };
+
+    fetchSubscriptions();
+  }, [user, router]);
 
   return (
     <div className="relative mx-auto max-w-6xl px-4">
@@ -71,7 +95,7 @@ export const Dashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div onClick={() => history.push('/subscriptions')}>
+          <div onClick={() => router.push('/subscriptions')}>
             <StatCard 
               icon={CreditCard} 
               value="8" 
@@ -79,7 +103,7 @@ export const Dashboard = () => {
               trend="2" 
             />
           </div>
-          <div onClick={() => history.push('/family')}>
+          <div onClick={() => router.push('/family')}>
             <StatCard 
               icon={Users} 
               value="3" 

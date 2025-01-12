@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
 import { HowItWorks } from './HowItWorks';
 import { Benefits } from './Benefits';
 import { Testimonials } from './Testimonials';
@@ -36,7 +39,16 @@ const services = [
 ];
 
 export const Hero = () => {
-  const history = useHistory();
+  const router = useRouter();
+  const { currentUser } = useAuth();
+
+  const handleGetStarted = () => {
+    if (currentUser) {
+      router.push('/dashboard');
+    } else {
+      router.push('/login');
+    }
+  };
 
   return (
     <>
@@ -71,14 +83,14 @@ export const Hero = () => {
           </div>
 
           <button 
-            onClick={() => history.push('/dashboard')}
+            onClick={handleGetStarted}
             className="group relative px-8 py-4 rounded-full font-semibold text-lg text-white overflow-hidden transition-all duration-300 transform hover:scale-105"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500" />
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="relative flex items-center gap-2">
-              Jetzt starten
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {currentUser ? 'Zum Dashboard' : 'Jetzt starten'}
+              <ArrowRight className="w-5 h-5 ml-2" />
             </span>
           </button>
 
