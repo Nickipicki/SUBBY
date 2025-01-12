@@ -1,9 +1,7 @@
 'use client';
 
-import { DashboardPageContent } from '@/components/DashboardPageContent';
+import { Dashboard } from '@/components/Dashboard';
 
-const Page = () => {
-  return <DashboardPageContent />;
-};
-
-export default Page; 
+export default function DashboardPage() {
+  return <Dashboard />;
+} 
