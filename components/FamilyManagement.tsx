@@ -1,0 +1,113 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Family } from '../types';
+import { useAuth } from '../contexts/AuthContext';
+import { DatabaseService } from '../services/database';
+
+export const FamilyManagement: React.FC = () => {
+  const [families, setFamilies] = useState<Family[]>([]);
+  const [newFamilyName, setNewFamilyName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const { user } = useAuth();
+
+  const loadFamilies = async () => {
+    if (!user) return;
+    try {
+      const families = await DatabaseService.getFamilies(user.id);
+      setFamilies(families);
+    } catch (err) {
+      setError('Fehler beim Laden der Familien');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFamilies();
+  }, [user]);
+
+  const createFamily = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newFamilyName.trim()) return;
+
+    try {
+      await DatabaseService.createFamily(newFamilyName, user!.id);
+      setNewFamilyName('');
+      loadFamilies(); // Lade die Liste neu
+    } catch (err) {
+      setError('Fehler beim Erstellen der Familie');
+      console.error(err);
+    }
+  };
+
+  const addMember = async (familyId: string, email: string) => {
+    try {
+      // Hier müssten wir erst die User-ID für die E-Mail finden
+      // Dies ist nur ein Beispiel - in der Praxis brauchen wir eine Suche nach Benutzern
+      await DatabaseService.addFamilyMember(familyId, email);
+      loadFamilies();
+    } catch (err) {
+      setError('Fehler beim Hinzufügen des Mitglieds');
+      console.error(err);
+    }
+  };
+
+  // Formatiere das Datum auf eine konsistente Weise
+  const formatDate = (dateString: string) => {
+    // Verwende eine feste Locale und Format
+    return new Date(dateString).toLocaleDateString('de-DE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
+
+  if (loading) return <div>Lade...</div>;
+
+  return (
+    <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-[#0D1117]/80 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6 shadow-2xl">
+        <h2 className="text-2xl font-bold text-white mb-6">Familien & Gruppen</h2>
+        
+        {error && <div className="error">{error}</div>}
+        
+        <div className="create-family">
+          <h3>Neue Familie/Gruppe erstellen</h3>
+          <form onSubmit={createFamily}>
+            <input
+              type="text"
+              value={newFamilyName}
+              onChange={(e) => setNewFamilyName(e.target.value)}
+              placeholder="Name der Familie/Gruppe"
+            />
+            <button type="submit">Erstellen</button>
+          </form>
+        </div>
+
+        <div className="my-families">
+          <h3>Meine Familien/Gruppen</h3>
+          {families.map(family => (
+            <div key={family.id} className="family-card">
+              <h4>{family.name}</h4>
+              <p>Erstellt am: {formatDate(family.created_at)}</p>
+              <p>Mitglieder: {(family.family_members?.length || 0) + 1}</p>
+              {family.owner_id === user?.id && (
+                <div className="add-member">
+                  <input
+                    type="email"
+                    placeholder="E-Mail des neuen Mitglieds"
+                    // Hier würde noch die Logik zum Hinzufügen kommen
+                  />
+                  <button>Hinzufügen</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}; 
