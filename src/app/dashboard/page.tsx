@@ -1,7 +1,12 @@
 'use client';
 
-import { DashboardPageContent } from '@/components/DashboardPageContent';
+import { Protected } from '@/components/Protected';
+import { Dashboard } from '@/components/Dashboard';
 
-export default function Page() {
-  return <DashboardPageContent />;
+export default function DashboardPage() {
+  return (
+    <Protected>
+      <Dashboard />
+    </Protected>
+  );
 } 

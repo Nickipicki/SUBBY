@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Family } from '../types';
-import { useAuth } from '../contexts/AuthContext';
-import { DatabaseService } from '../services/database';
+import { Family } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { DatabaseService } from '@/services/database';
 
 export const FamilyManagement: React.FC = () => {
   const [families, setFamilies] = useState<Family[]>([]);
