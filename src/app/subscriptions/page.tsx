@@ -1,14 +1,5 @@
-import { Navbar } from '@/components/Navbar';
-import { SubscriptionList } from '@/components/SubscriptionList';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { SubscriptionsContent } from '@/components/SubscriptionsContent';
 
-export default function SubscriptionsPage() {
-  return (
-    <ProtectedRoute>
-      <main>
-        <Navbar />
-        <SubscriptionList />
-      </main>
-    </ProtectedRoute>
-  );
+export default function Page() {
+  return <SubscriptionsContent />;
 } 

@@ -1,104 +1,197 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
+import { 
+  RiDashboardLine, 
+  RiFileListLine,
+  RiPieChartLine,
+  RiCalendarCheckLine,
+  RiTeamLine,
+  RiSettings4Line,
+  RiLogoutBoxRLine,
+  RiMenuLine,
+  RiCloseLine,
+  RiAddLine
+} from 'react-icons/ri';
 
-const SubbyLogo = () => (
-  <div className="flex items-center gap-2">
-    <span className="text-2xl font-bold text-white">subby</span>
-    <img 
-      src="/images/logo.svg"
-      alt="Subby Logo"
-      className="h-14 w-auto"
-    />
-  </div>
-);
+const menuItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: RiDashboardLine },
+  { href: '/subscriptions', label: 'Abonnements', icon: RiFileListLine },
+  { href: '/analysis', label: 'Kostenanalyse', icon: RiPieChartLine },
+  { href: '/cancellation', label: 'Kündigungsassistent', icon: RiCalendarCheckLine },
+  { href: '/family', label: 'Familienmanagement', icon: RiTeamLine },
+  { href: '/settings', label: 'Einstellungen', icon: RiSettings4Line },
+];
 
-export const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { currentUser, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     try {
       await signOut();
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Fehler beim Ausloggen:', error);
     }
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-[#0B0F19]/95 backdrop-blur-xl shadow-lg' 
-        : 'bg-transparent'
-    }`}>
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link 
-          href="/" 
-          className="flex items-center transform hover:scale-105 transition-transform group"
-        >
-          <SubbyLogo />
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full blur opacity-0 group-hover:opacity-20 transition duration-500" />
-        </Link>
-        
-        <div className="flex items-center gap-8">
-          {currentUser ? (
+    <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0B0F19]/30 backdrop-blur-sm transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 flex items-center gap-4 -ml-6">
+            <img src="/images/logo.svg" alt="Subby Logo" className="h-14 w-auto" />
+            <span className="text-2xl font-bold text-white">subby</span>
+          </Link>
+
+          {user ? (
             <>
-              {[
-                { path: '/dashboard', label: 'Dashboard' },
-                { path: '/family', label: 'Familie' },
-                { path: '/subscriptions', label: 'Abos' },
-              ].map(({ path, label }) => (
-                <Link 
-                  key={path}
-                  href={path} 
-                  className="relative px-2 py-1 text-sm font-medium transition-colors group"
-                >
-                  <span className={`relative z-10 transition-colors ${
-                    pathname === path 
-                      ? 'text-white' 
-                      : 'text-gray-400 group-hover:text-white'
-                  }`}>
-                    {label}
-                  </span>
-                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500 to-indigo-500 transform origin-left transition-transform duration-300
-                    ${pathname === path ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
-                  `} />
-                  <div className="absolute -inset-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500 group-hover:duration-200" />
-                </Link>
-              ))}
+              {/* Desktop Navigation für eingeloggte Benutzer */}
+              <div className="hidden lg:flex items-center justify-between flex-1 pl-8">
+                <div className="flex items-center space-x-4">
+                  {menuItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors relative group ${
+                          pathname === item.href
+                            ? 'text-white bg-white/5'
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Icon className="w-5 h-5" />
+                          <span>{item.label}</span>
+                        </div>
+                        {pathname === item.href && (
+                          <motion.div
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-indigo-500"
+                            layoutId="navbar-indicator"
+                          />
+                        )}
+                      </Link>
+                    );
+                  })}
+
+                  {/* Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RiLogoutBoxRLine className="w-5 h-5" />
+                      <span>Logout</span>
+                    </div>
+                  </button>
+                </div>
+
+                {/* CTA Button */}
+                <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg text-white font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-1.5 whitespace-nowrap ml-8 mr-[-1rem]">
+                  <RiAddLine className="w-4 h-4" />
+                  Neues Abo
+                </button>
+              </div>
+
+              {/* Mobile Menu Button */}
               <button
-                onClick={handleSignOut}
-                className="relative px-6 py-2.5 rounded-full text-white text-sm font-medium group transform hover:translate-y-[-1px] transition-all duration-300"
+                onClick={() => setIsOpen(!isOpen)}
+                className="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/50 to-red-600/50 rounded-full" />
-                <span className="relative">Abmelden</span>
+                {isOpen ? (
+                  <RiCloseLine className="w-6 h-6" />
+                ) : (
+                  <RiMenuLine className="w-6 h-6" />
+                )}
               </button>
             </>
           ) : (
-            <Link 
-              href="/login" 
-              className="relative overflow-hidden px-6 py-2.5 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-medium group transform hover:translate-y-[-1px] transition-all duration-300"
-            >
-              <span className="relative z-10">Anmelden</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-50 blur-lg transition duration-500 group-hover:duration-200" />
-            </Link>
+            /* Navigation für nicht eingeloggte Benutzer */
+            <div className="flex items-center space-x-4 ml-auto">
+              <Link
+                href="/login"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === '/login'
+                    ? 'text-white bg-white/5'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Anmelden
+              </Link>
+              <Link
+                href="/register"
+                className={`px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 transition-opacity ${
+                  pathname === '/register' ? 'opacity-90' : ''
+                }`}
+              >
+                Registrieren
+              </Link>
+            </div>
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && user && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-3 py-2 rounded-lg text-base font-medium ${
+                      pathname === item.href
+                        ? 'text-white bg-white/5'
+                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Icon className="w-5 h-5" />
+                      <span>{item.label}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+
+              {/* Mobile Logout Button */}
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+              >
+                <div className="flex items-center space-x-2">
+                  <RiLogoutBoxRLine className="w-5 h-5" />
+                  <span>Logout</span>
+                </div>
+              </button>
+
+              {/* Mobile CTA Button */}
+              <button className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg text-white font-medium hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-1.5">
+                <RiAddLine className="w-4 h-4" />
+                Neues Abo
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
-};
-
-export default Navbar; 
+} 

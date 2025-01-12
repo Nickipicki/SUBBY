@@ -30,7 +30,7 @@ const benefits = [
 export const Benefits = () => {
   return (
     <div className="relative py-20">
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-[#0B0F19]/10 to-[#0B0F19]/20" />
+   
       
       <div className="container mx-auto px-4 relative">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

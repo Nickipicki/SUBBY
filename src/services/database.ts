@@ -1,8 +1,7 @@
-import { supabase } from '../lib/supabase';
-import { Subscription } from '../types';
+import { supabase } from '@/lib/supabase';
 
 export const DatabaseService = {
-  async getSubscriptions(): Promise<Subscription[]> {
+  async getSubscriptions() {
     const { data, error } = await supabase
       .from('subscriptions')
       .select('*');
@@ -11,10 +10,20 @@ export const DatabaseService = {
     return data;
   },
 
-  async addSubscription(subscription: Omit<Subscription, 'id'>): Promise<Subscription> {
+  async getFamilies(userId: string) {
     const { data, error } = await supabase
-      .from('subscriptions')
-      .insert([subscription])
+      .from('families')
+      .select('*, family_members(*)')
+      .or(`owner_id.eq.${userId},family_members.user_id.eq.${userId}`);
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async createFamily(name: string, ownerId: string) {
+    const { data, error } = await supabase
+      .from('families')
+      .insert([{ name, owner_id: ownerId }])
       .select()
       .single();
     
@@ -22,21 +31,20 @@ export const DatabaseService = {
     return data;
   },
 
-  async updateSubscription(id: string, subscription: Partial<Subscription>): Promise<void> {
-    const { error } = await supabase
-      .from('subscriptions')
-      .update(subscription)
-      .eq('id', id);
+  async addFamilyMember(familyId: string, email: string) {
+    // Erst User-ID für die E-Mail finden
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
     
-    if (error) throw error;
-  },
-
-  async deleteSubscription(id: string): Promise<void> {
+    if (userError) throw userError;
+    
     const { error } = await supabase
-      .from('subscriptions')
-      .delete()
-      .eq('id', id);
+      .from('family_members')
+      .insert([{ family_id: familyId, user_id: userData.id }]);
     
     if (error) throw error;
   }
-}; 
+};

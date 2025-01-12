@@ -5,6 +5,7 @@ import { CreditCard, Users, Receipt, Bell, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { DatabaseService } from '../services/database';
+import { motion } from 'framer-motion';
 
 // Logos für die Slideshow
 const services = [
@@ -52,11 +53,6 @@ export const Dashboard = () => {
   const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
     const fetchSubscriptions = async () => {
       try {
         const data = await DatabaseService.getSubscriptions();
@@ -67,10 +63,14 @@ export const Dashboard = () => {
     };
 
     fetchSubscriptions();
-  }, [user, router]);
+  }, []);
+
+  const handleNavigation = () => {
+    router.push('/subscriptions');
+  };
 
   return (
-    <div className="relative mx-auto max-w-6xl px-4">
+    
       <div className="bg-[#0D1117]/80 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6 shadow-2xl">
         {/* Dashboard Header */}
         <div className="flex items-center justify-between mb-8 border-b border-gray-800/50 pb-6">
@@ -95,7 +95,7 @@ export const Dashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div onClick={() => router.push('/subscriptions')}>
+          <div onClick={handleNavigation}>
             <StatCard 
               icon={CreditCard} 
               value="8" 
@@ -141,21 +141,21 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Logo Slideshow */}
+        {/* Logo Slideshow - breiter machen */}
         <div className="mt-8 pt-8 border-t border-gray-800/50">
           <h3 className="text-lg font-semibold text-white mb-6">Unterstützte Dienste</h3>
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden w-full">
             <div className="flex animate-slide">
               {/* Erste Gruppe */}
               {services.map((service, i) => (
                 <div 
                   key={i} 
-                  className="flex-shrink-0 w-32 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300"
+                  className="flex-shrink-0 w-48 mx-12 filter grayscale hover:grayscale-0 transition-all duration-300"
                 >
                   <img 
                     src={service.logo} 
                     alt={service.name}
-                    className="w-full h-12 object-contain"
+                    className="w-full h-16 object-contain"
                   />
                 </div>
               ))}
@@ -163,12 +163,12 @@ export const Dashboard = () => {
               {services.map((service, i) => (
                 <div 
                   key={`repeat-${i}`} 
-                  className="flex-shrink-0 w-32 mx-8 filter grayscale hover:grayscale-0 transition-all duration-300"
+                  className="flex-shrink-0 w-48 mx-12 filter grayscale hover:grayscale-0 transition-all duration-300"
                 >
                   <img 
                     src={service.logo} 
                     alt={service.name}
-                    className="w-full h-12 object-contain"
+                    className="w-full h-16 object-contain"
                   />
                 </div>
               ))}

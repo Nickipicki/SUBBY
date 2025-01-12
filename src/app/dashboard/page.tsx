@@ -1,14 +1,9 @@
-import { Navbar } from '@/components/Navbar';
-import { Dashboard } from '@/components/Dashboard';
-import ProtectedRoute from '@/components/ProtectedRoute';
+'use client';
 
-export default function DashboardPage() {
-  return (
-    <ProtectedRoute>
-      <main>
-        <Navbar />
-        <Dashboard />
-      </main>
-    </ProtectedRoute>
-  );
-} 
+import { DashboardPageContent } from '@/components/DashboardPageContent';
+
+const Page = () => {
+  return <DashboardPageContent />;
+};
+
+export default Page; 

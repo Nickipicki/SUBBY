@@ -1,14 +1,5 @@
-import { Navbar } from '@/components/Navbar';
-import { FamilyManagement } from '@/components/FamilyManagement';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { FamilyContent } from '@/components/FamilyContent';
 
-export default function FamilyPage() {
-  return (
-    <ProtectedRoute>
-      <main>
-        <Navbar />
-        <FamilyManagement />
-      </main>
-    </ProtectedRoute>
-  );
+export default function Page() {
+  return <FamilyContent />;
 } 
