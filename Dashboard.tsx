@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, Users, Receipt, Bell, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
-import { DatabaseService } from '../services/database';
+import { useAuth } from '@/contexts/AuthContext';
+import { DatabaseService } from '@/services/database';
 import { motion } from 'framer-motion';
 import { Subscription } from '@/types';
 
