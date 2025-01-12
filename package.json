@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf .next && next build && rm -rf build && mkdir build && cp -r .next/* build/",
+    "build": "rm -rf .next && NEXT_TELEMETRY_DISABLED=1 next build && rm -rf build && mkdir build && cp -r .next/* build/",
     "start": "next start -p ${PORT:-3000}",
     "lint": "next lint"
   },
