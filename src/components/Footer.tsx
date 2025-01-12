@@ -17,21 +17,21 @@ export const Footer = () => {
 
           {/* Rechtliches */}
           <div className="col-span-1">
-            <h3 className="text-white font-medium mb-4">Rechtliches</h3>
+            <h3 className="text-white font-medium mb-4"></h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Impressum
+                  
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Datenschutz
+                  
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  AGB
+                  
                 </a>
               </li>
             </ul>
@@ -39,16 +39,16 @@ export const Footer = () => {
 
           {/* Kontakt */}
           <div className="col-span-1">
-            <h3 className="text-white font-medium mb-4">Kontakt</h3>
+            <h3 className="text-white font-medium mb-4"></h3>
             <ul className="space-y-2">
               <li>
                 <a href="mailto:support@subby.app" className="text-gray-400 hover:text-white transition-colors">
-                  support@subby.app
+                  
                 </a>
               </li>
               <li className="text-gray-400">
-                Musterstraße 123<br />
-                12345 Musterstadt
+               <br />
+                
               </li>
             </ul>
           </div>
