@@ -1,19 +1,23 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { DatabaseService } from '@/services/database';
+import { Subscription } from '@/types';
+import { Protected } from '@/components/Protected';
+import ClientOnly from '@/components/ClientOnly';
+import { YearlyTimeline } from '@/components/YearlyTimeline';
+import { MonthlyMiniGraph } from '@/components/MonthlyMiniGraph';
+import { SubscriptionRing } from '@/components/SubscriptionRing';
+import { ActivityBars } from '@/components/ActivityBars';
+import { PaymentCountdown } from '@/components/PaymentCountdown';
+import { MemberAvatar } from '@/components/MemberAvatar';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { CreditCard, DollarSign, Users, Activity, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Protected } from '@/components/Protected';
-import ClientOnly from '@/components/ClientOnly';
-import { YearlyTimeline } from './YearlyTimeline';
-import { MonthlyMiniGraph } from './MonthlyMiniGraph';
-import { SubscriptionRing } from './SubscriptionRing';
-import { ActivityBars } from './ActivityBars';
-import { PaymentCountdown } from './PaymentCountdown';
-import { MemberAvatar } from './MemberAvatar';
-import { PageTitle } from './PageTitle';
+import { PageTitle } from '@/components/PageTitle';
 
 const MotionCard = motion(Card);
 
