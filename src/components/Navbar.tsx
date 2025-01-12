@@ -42,12 +42,12 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0B0F19]/30 backdrop-blur-sm transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 flex items-center gap-2 sm:gap-4 -ml-3 sm:-ml-6">
-            <img src="/images/logo.svg" alt="Subby Logo" className="h-10 sm:h-14 w-auto" />
-            <span className="text-xl sm:text-2xl font-bold text-white">subby</span>
+          <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0 flex items-center gap-4 -ml-6">
+            <img src="/images/logo.svg" alt="Subby Logo" className="h-14 w-auto" />
+            <span className="text-2xl font-bold text-white">subby</span>
           </Link>
 
           {user ? (
@@ -114,10 +114,10 @@ export default function Navbar() {
             </>
           ) : (
             /* Navigation für nicht eingeloggte Benutzer */
-            <div className="flex items-center space-x-2 sm:space-x-4 ml-auto">
+            <div className="flex items-center space-x-4 ml-auto">
               <Link
                 href="/login"
-                className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   pathname === '/login'
                     ? 'text-white bg-white/5'
                     : 'text-gray-300 hover:text-white'
@@ -127,7 +127,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/register"
-                className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 transition-opacity ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 transition-opacity ${
                   pathname === '/register' ? 'opacity-90' : ''
                 }`}
               >
@@ -145,9 +145,9 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#0B0F19]/95 border-t border-gray-800/50"
+            className="lg:hidden"
           >
-            <div className="px-3 py-2 space-y-1">
+            <div className="px-2 pt-2 pb-3 space-y-1">
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -155,13 +155,13 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium ${
+                    className={`block px-3 py-2 rounded-lg text-base font-medium ${
                       pathname === item.href
                         ? 'text-white bg-white/5'
                         : 'text-gray-300 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
                       <Icon className="w-5 h-5" />
                       <span>{item.label}</span>
                     </div>
@@ -175,16 +175,16 @@ export default function Navbar() {
                   handleLogout();
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                className="w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                   <RiLogoutBoxRLine className="w-5 h-5" />
                   <span>Logout</span>
                 </div>
               </button>
 
               {/* Mobile CTA Button */}
-              <button className="w-full mt-2 px-3 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg text-white text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2">
+              <button className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg text-white font-medium hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-1.5">
                 <RiAddLine className="w-4 h-4" />
                 Neues Abo
               </button>
