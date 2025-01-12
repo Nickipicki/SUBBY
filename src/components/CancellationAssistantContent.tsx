@@ -97,8 +97,8 @@ export function CancellationAssistantContent() {
           return b.usageFrequency - a.usageFrequency;
         case 'deadline':
         default:
-          return new Date(a.cancellationDeadline.split('.').reverse().join('-')) -
-                 new Date(b.cancellationDeadline.split('.').reverse().join('-'));
+          return new Date(a.cancellationDeadline.split('.').reverse().join('-')).getTime() -
+                 new Date(b.cancellationDeadline.split('.').reverse().join('-')).getTime();
       }
     });
 
@@ -163,7 +163,7 @@ export function CancellationAssistantContent() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
+              <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as SortOption)}>
                 <SelectTrigger className="bg-gray-800/30 border-gray-700/50 text-white">
                   <SelectValue placeholder="Sortieren nach..." />
                 </SelectTrigger>
@@ -173,7 +173,7 @@ export function CancellationAssistantContent() {
                   <SelectItem value="usage">Nach Nutzung</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as FilterStatus)}>
+              <Select value={statusFilter} onValueChange={(value: string) => setStatusFilter(value as FilterStatus)}>
                 <SelectTrigger className="bg-gray-800/30 border-gray-700/50 text-white">
                   <SelectValue placeholder="Status filtern..." />
                 </SelectTrigger>

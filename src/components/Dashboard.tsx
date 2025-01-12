@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { DatabaseService } from '../services/database';
 import { motion } from 'framer-motion';
+import { Subscription } from '@/types';
 
 // Logos für die Slideshow
 const services = [
@@ -50,7 +51,7 @@ const StatCard = ({ icon: Icon, value, label, trend }: { icon: any, value: strin
 export const Dashboard = () => {
   const router = useRouter();
   const { user } = useAuth();
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -70,7 +71,7 @@ export const Dashboard = () => {
   };
 
   return (
-    
+    <div className="w-full max-w-[2560px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-[#0D1117]/80 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6 shadow-2xl">
         {/* Dashboard Header */}
         <div className="flex items-center justify-between mb-8 border-b border-gray-800/50 pb-6">

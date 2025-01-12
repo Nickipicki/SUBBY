@@ -10,19 +10,13 @@ export const FamilyManagement: React.FC = () => {
   const [newFamilyName, setNewFamilyName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { currentUser } = useAuth();
-
-  // Lade Familien beim Start
-  useEffect(() => {
-    if (currentUser) {
-      loadFamilies();
-    }
-  }, [currentUser]);
+  const { user } = useAuth();
 
   const loadFamilies = async () => {
+    if (!user) return;
     try {
-      const loadedFamilies = await DatabaseService.getFamilies(currentUser!.id);
-      setFamilies(loadedFamilies);
+      const families = await DatabaseService.getFamilies(user.id);
+      setFamilies(families);
     } catch (err) {
       setError('Fehler beim Laden der Familien');
       console.error(err);
@@ -31,12 +25,16 @@ export const FamilyManagement: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    loadFamilies();
+  }, [user]);
+
   const createFamily = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newFamilyName.trim()) return;
 
     try {
-      await DatabaseService.createFamily(newFamilyName, currentUser!.id);
+      await DatabaseService.createFamily(newFamilyName, user!.id);
       setNewFamilyName('');
       loadFamilies(); // Lade die Liste neu
     } catch (err) {
@@ -96,7 +94,7 @@ export const FamilyManagement: React.FC = () => {
               <h4>{family.name}</h4>
               <p>Erstellt am: {formatDate(family.created_at)}</p>
               <p>Mitglieder: {(family.family_members?.length || 0) + 1}</p>
-              {family.owner_id === currentUser?.id && (
+              {family.owner_id === user?.id && (
                 <div className="add-member">
                   <input
                     type="email"

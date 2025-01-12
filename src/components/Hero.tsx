@@ -86,10 +86,10 @@ const AnimatedLogo = () => {
 
 export const Hero = () => {
   const router = useRouter();
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
 
   const handleGetStarted = () => {
-    if (currentUser) {
+    if (user) {
       router.push('/dashboard');
     } else {
       router.push('/login');
@@ -133,7 +133,7 @@ export const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500" />
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="relative flex items-center gap-2">
-              {currentUser ? 'Zum Dashboard' : 'Jetzt starten'}
+              {user ? 'Zum Dashboard' : 'Jetzt starten'}
               <ArrowRight className="w-5 h-5 ml-2" />
             </span>
           </button>
