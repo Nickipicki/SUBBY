@@ -1,24 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
-export default function ProtectedRoute({
-  children,
-}: {
+interface Props {
   children: React.ReactNode;
-}) {
-  const { currentUser, loading } = useAuth();
+}
+
+export default function ProtectedRoute({ children }: Props) {
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !currentUser) {
+    if (!user) {
       router.push('/login');
     }
-  }, [currentUser, loading, router]);
+  }, [user, router]);
 
-  if (loading) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
@@ -26,5 +26,5 @@ export default function ProtectedRoute({
     );
   }
 
-  return currentUser ? <>{children}</> : null;
+  return children;
 } 
