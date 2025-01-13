@@ -32,6 +32,9 @@ export default function Navbar() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
 
+  // Prüfen, ob wir uns auf einer Auth-Seite befinden
+  const isAuthPage = pathname === '/login' || pathname === '/register';
+
   const handleLogout = async () => {
     try {
       await signOut();
@@ -114,26 +117,28 @@ export default function Navbar() {
             </>
           ) : (
             /* Navigation für nicht eingeloggte Benutzer */
-            <div className="flex items-center space-x-4 ml-auto">
-              <Link
-                href="/login"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === '/login'
-                    ? 'text-white bg-white/5'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                Anmelden
-              </Link>
-              <Link
-                href="/register"
-                className={`px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 transition-opacity ${
-                  pathname === '/register' ? 'opacity-90' : ''
-                }`}
-              >
-                Registrieren
-              </Link>
-            </div>
+            !isAuthPage && (
+              <div className="flex items-center space-x-4 ml-auto">
+                <Link
+                  href="/login"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/login'
+                      ? 'text-white bg-white/5'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  Anmelden
+                </Link>
+                <Link
+                  href="/register"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 transition-opacity ${
+                    pathname === '/register' ? 'opacity-90' : ''
+                  }`}
+                >
+                  Registrieren
+                </Link>
+              </div>
+            )
           )}
         </div>
       </div>

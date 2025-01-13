@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,14 +24,20 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] px-4">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0B0F19] px-4 pt-40">
+      <div className="w-full max-w-md space-y-12">
+        {/* Logo */}
+        <div className="flex flex-col items-center space-y-6">
+          <Link href="/" className="flex items-center gap-4">
+            <img src="/images/logo.svg" alt="Subby Logo" className="h-20 w-auto" />
+            <span className="text-3xl font-bold text-white">subby</span>
+          </Link>
+          <h2 className="text-center text-3xl font-extrabold text-white">
             Anmelden
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-500 rounded-lg p-4 text-sm">
               {error}
