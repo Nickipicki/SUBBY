@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useAnimate } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,32 +9,62 @@ import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { AuthSwitch } from '@/components/AuthSwitch';
 import { ParticleBackground } from '@/components/ParticleBackground';
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
-  const { signUp, signInWithGoogle, signInWithGithub } = useAuth();
+  const { signIn, signInWithGoogle, signInWithGithub } = useAuth();
+  const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    const showConfetti = async () => {
+      // Warte auf die Logo-Drehung
+      await new Promise(resolve => setTimeout(resolve, 1300));
+
+      // Erstelle 20 Konfetti-Partikel
+      const confetti = Array.from({ length: 20 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 60 - 30, // -30px bis +30px
+        y: Math.random() * -60 - 20, // -20px bis -80px
+        rotation: Math.random() * 360,
+        scale: Math.random() * 0.5 + 0.5,
+      }));
+
+      // Animiere jedes Konfetti
+      confetti.forEach(particle => {
+        animate(
+          `[data-confetti="${particle.id}"]`,
+          {
+            x: [0, particle.x],
+            y: [0, particle.y],
+            rotate: [0, particle.rotation],
+            scale: [0, particle.scale, 0],
+            opacity: [0, 1, 0],
+          },
+          {
+            duration: 1,
+            ease: "easeOut",
+          }
+        );
+      });
+    };
+
+    showConfetti();
+  }, [animate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setError('Passwörter stimmen nicht überein');
-      return;
-    }
     try {
-      await signUp(email, password);
-      router.push('/dashboard');
+      await signIn(email, password);
     } catch (err) {
-      setError('Fehler bei der Registrierung. Bitte versuche es erneut.');
+      setError('Ungültige E-Mail oder Passwort');
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      router.push('/dashboard');
     } catch (err) {
       setError('Fehler bei der Google-Anmeldung');
     }
@@ -43,30 +73,30 @@ export default function RegisterPage() {
   const handleGithubLogin = async () => {
     try {
       await signInWithGithub();
-      router.push('/dashboard');
     } catch (err) {
       setError('Fehler bei der GitHub-Anmeldung');
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-row-reverse bg-[#0B0F19] relative overflow-hidden justify-center gap-32">
+    <div className="min-h-screen flex bg-[#0B0F19] relative overflow-hidden justify-center gap-32">
       <ParticleBackground />
       
-      {/* Rechte Seite mit Logo */}
+      {/* Linke Seite mit Logo */}
       <motion.div 
-        className="hidden lg:flex w-[600px] items-center justify-start relative"
-        initial={{ x: "100%", opacity: 0, scale: 0.8 }}
+        className="hidden lg:flex w-[600px] items-center justify-end relative"
+        initial={{ x: "-100%", opacity: 0, scale: 0.8 }}
         animate={{ x: 0, opacity: 1, scale: 1 }}
-        exit={{ x: "-100%", opacity: 0, scale: 0.8 }}
+        exit={{ x: "100%", opacity: 0, scale: 0.8 }}
         transition={{
           duration: 0.7,
           ease: [0.22, 1, 0.36, 1],
         }}
       >
         <motion.div
+          ref={scope}
           className="relative w-96 h-96"
-          initial={{ rotate: 180 }}
+          initial={{ rotate: -180 }}
           animate={{ rotate: 0 }}
           transition={{
             duration: 1,
@@ -79,20 +109,29 @@ export default function RegisterPage() {
             alt="Subby Logo"
             className="w-full h-full object-contain"
           />
+          {/* Konfetti */}
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div
+              key={i}
+              data-confetti={i}
+              className="absolute left-1/2 top-1/2 w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500"
+              initial={{ x: 0, y: 0, scale: 0, opacity: 0 }}
+            />
+          ))}
         </motion.div>
       </motion.div>
 
       {/* Auth Switch */}
-      <div className="hidden lg:flex absolute left-1/2 top-[5%] -translate-x-1/2 z-10 scale-90">
+      <div className="hidden lg:flex absolute left-1/2 top-[3%] -translate-x-1/2 z-10 scale-75">
         <AuthSwitch />
       </div>
 
-      {/* Linke Seite mit Registrierungsformular */}
+      {/* Rechte Seite mit Login-Formular */}
       <motion.div 
-        className="w-full lg:w-[600px] flex items-center justify-end relative pt-20"
-        initial={{ x: "-100%", opacity: 0, scale: 0.8 }}
+        className="w-full lg:w-[600px] flex items-center justify-start relative pt-20"
+        initial={{ x: "100%", opacity: 0, scale: 0.8 }}
         animate={{ x: 0, opacity: 1, scale: 1 }}
-        exit={{ x: "100%", opacity: 0, scale: 0.8 }}
+        exit={{ x: "-100%", opacity: 0, scale: 0.8 }}
         transition={{
           duration: 0.7,
           ease: [0.22, 1, 0.36, 1],
@@ -117,9 +156,9 @@ export default function RegisterPage() {
               />
             </div>
 
-            <h2 className="text-4xl font-bold text-white mb-2 text-center">Konto erstellen</h2>
-            <p className="text-gray-400 text-center mb-8">Erstelle dein Konto und starte mit Subby</p>
-
+            <h2 className="text-4xl font-bold text-white mb-2 text-center">Willkommen zurück</h2>
+            <p className="text-gray-400 text-center mb-8">Melde dich an und verwalte deine Abonnements</p>
+            
             {error && (
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
@@ -130,7 +169,7 @@ export default function RegisterPage() {
               </motion.div>
             )}
 
-            {/* Social Login Buttons */}
+            {/* Social Login Buttons mit verbesserten Hover-Effekten */}
             <div className="space-y-4 mb-6">
               <button
                 onClick={handleGoogleLogin}
@@ -149,7 +188,7 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Trennlinie */}
+            {/* Verbesserte Trennlinie */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-white/10"></div>
@@ -188,35 +227,21 @@ export default function RegisterPage() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
-                  Passwort bestätigen
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-white transition-all duration-300"
-                  required
-                />
-              </div>
-
               <button
                 type="submit"
                 className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-xl font-medium hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
               >
-                Konto erstellen
+                Anmelden
               </button>
             </form>
 
             <p className="mt-8 text-center text-gray-400">
-              Bereits ein Konto?{' '}
+              Noch kein Konto?{' '}
               <Link 
-                href="/login" 
+                href="/register" 
                 className="text-purple-400 hover:text-purple-300 transition-colors font-medium hover:underline"
               >
-                Jetzt anmelden
+                Jetzt registrieren
               </Link>
             </p>
           </div>
