@@ -37,6 +37,10 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={inter.className}>
+        {/* Beta Banner */}
+        <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-center py-1 text-sm font-medium">
+          🚧 Subby befindet sich noch in der Beta-Phase 🚧
+        </div>
         <AuthProvider>
           <ClientLayout>
             {children}
