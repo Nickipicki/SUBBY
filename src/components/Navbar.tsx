@@ -119,6 +119,13 @@ export default function Navbar() {
             /* Navigation für nicht eingeloggte Benutzer */
             !isAuthPage && (
               <div className="flex items-center space-x-4 ml-auto">
+                {/* Kontakt Button in der Mitte */}
+                <a
+                  href="mailto:info@subby.ch"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                >
+                  Kontakt
+                </a>
                 <Link
                   href="/login"
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
